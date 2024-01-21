@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import PostApi from '../Tags/api/PostApi';
 import FormInput from '../Tags/FormInput';
 import ErrMessage from '../Tags/ErrMessage';
-import store from '../redux/store/store';
-import { Link } from 'react-router-dom';
-import Header from '../Tags/Header';
+import { Link, useNavigate } from 'react-router-dom';
 import StyledSubmit from '../Tags/StyledSubmit';
 import Margin from '../Tags/Margin';
 
@@ -24,6 +22,7 @@ export default function Register() {
   const [ mismatch, setMismatch ] = useState(false)
   const [ apiErrorMessage, setApiErrorMessage ] = useState(false)
   const { control, handleSubmit } = useForm()
+  const navigate = useNavigate()
 
   const onSubmit = (data) => {
     if(data.password !== data.confirmPassword){
@@ -31,7 +30,7 @@ export default function Register() {
     }
     setMismatch(false)
     PostApi.post('/createUser',{data}).then((res)=>{
-        console.log(res)
+        navigate('/login')
     }).catch((error)=>{
         error.response.data && setApiErrorMessage(error.response.data)
     })
